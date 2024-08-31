@@ -37,26 +37,6 @@ body{
     cursor: not-allowed;
 }
 
-/* .cell:nth-child(1),
-.cell:nth-child(2),
-.cell:nth-child(3) {
-    border-top: none;
-}
-
-.cell:nth-child(3n + 1) {
-    border-left: none;
-}
-
-.cell:nth-child(3n) {
-    border-right: none;
-}
-
-.cell:nth-child(7),
-.cell:nth-child(8),
-.cell:nth-child(9) {
-    border-bottom: none;
-} */
-
 .cell.x::before,
 .cell.x::after,
 .cell.o::before{
@@ -77,7 +57,6 @@ body{
     position: absolute;
     width: calc(var(--mark-size) * .15);
     height: calc(var(--mark-size));
-    /* border-radius: 50%; */
 }
 
 .cell.cell.x::after,

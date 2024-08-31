@@ -8,12 +8,12 @@ const winningMessageTextElement = document.querySelector('[data-result-text]')
 const resultElement = document.getElementById('result')
 const restartButton = document.getElementById('restartButton')
 
-const GRID_SIZE = 20;  // Set the grid size to 20x20
-const WIN_LENGTH = 5;  // Need 5 in a row to win
+const GRID_SIZE = 20;
+const WIN_LENGTH = 5;
 
 function generateBoard() {
     const board = document.getElementById('board');
-    board.style.gridTemplateColumns = `repeat(${GRID_SIZE}, auto)`; // Adjust grid to 20x20
+    board.style.gridTemplateColumns = `repeat(${GRID_SIZE}, auto)`;
   
     // Clear any existing cells
     board.innerHTML = '';
@@ -26,8 +26,8 @@ function generateBoard() {
       board.appendChild(cell);
     }
   
-    // Now update the cellElements to include the newly created cells
-    cellElements = document.querySelectorAll('[data-cell]');  // Update this line
+    // Update the cellElements to include the newly created cells
+    cellElements = document.querySelectorAll('[data-cell]');
 }
   
 
@@ -88,11 +88,11 @@ function checkRows(currentClass) {
                 if (cellElements[(row * GRID_SIZE) + (col + i)].classList.contains(currentClass)) {
                     consecutiveMarks++;
                 } else {
-                    break;  // Break early if a mark is not consecutive
+                    break;
                 }
             }
             if (consecutiveMarks === WIN_LENGTH) {
-                return true;  // Return true if 5 consecutive marks are found
+                return true;
             }
         }
     }
