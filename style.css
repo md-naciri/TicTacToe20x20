@@ -19,7 +19,7 @@ body{
     align-content: center;
     justify-items: center;
     align-items: center;
-    grid-template-columns: repeat(3, auto);
+    /* grid-template-columns: repeat(30, auto); */
 }
 
 .cell{
@@ -37,7 +37,7 @@ body{
     cursor: not-allowed;
 }
 
-.cell:nth-child(1),
+/* .cell:nth-child(1),
 .cell:nth-child(2),
 .cell:nth-child(3) {
     border-top: none;
@@ -55,7 +55,7 @@ body{
 .cell:nth-child(8),
 .cell:nth-child(9) {
     border-bottom: none;
-}
+} */
 
 .cell.x::before,
 .cell.x::after,
