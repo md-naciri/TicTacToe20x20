@@ -1,65 +1,51 @@
 const X_CLASS = 'x'
 const O_Class = 'o'
 let o_turn
-const WINNING_COMBINATIONS = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 4, 8],
-    [2, 4, 6],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-]
 
-const cellElements = document.querySelectorAll('[data-cell]');
+let cellElements = document.querySelectorAll('[data-cell]');
 const board = document.getElementById('board');
 const winningMessageTextElement = document.querySelector('[data-result-text]')
 const resultElement = document.getElementById('result')
 const restartButton = document.getElementById('restartButton')
 
 const GRID_SIZE = 20;  // Set the grid size to 20x20
+const WIN_LENGTH = 5;  // Need 5 in a row to win
 
 function generateBoard() {
-  const board = document.getElementById('board');
-  board.style.gridTemplateColumns = `repeat(${GRID_SIZE}, auto)`; // Adjust grid to 20x20
-
-  // Clear any existing cells
-  board.innerHTML = '';
-
-  // Generate 400 cells
-  for (let i = 0; i < GRID_SIZE * GRID_SIZE; i++) {
-    const cell = document.createElement('div');
-    cell.classList.add('cell');
-    cell.setAttribute('data-cell', '');
-    board.appendChild(cell);
-  }
-
-  // Reassign event listeners
-  cellElements = document.querySelectorAll('[data-cell]');
-  cellElements.forEach(cell => {
-    cell.classList.remove(X_CLASS);
-    cell.classList.remove(O_Class);
-    cell.removeEventListener('click', handleClick);
-    cell.addEventListener('click', handleClick, { once: true });
-  });
+    const board = document.getElementById('board');
+    board.style.gridTemplateColumns = `repeat(${GRID_SIZE}, auto)`; // Adjust grid to 20x20
+  
+    // Clear any existing cells
+    board.innerHTML = '';
+  
+    // Generate 400 cells
+    for (let i = 0; i < GRID_SIZE * GRID_SIZE; i++) {
+      const cell = document.createElement('div');
+      cell.classList.add('cell');
+      cell.setAttribute('data-cell', '');
+      board.appendChild(cell);
+    }
+  
+    // Now update the cellElements to include the newly created cells
+    cellElements = document.querySelectorAll('[data-cell]');  // Update this line
 }
+  
 
 startGame()
 
 function startGame(){
     generateBoard();
-    o_turn = false
+    o_turn = false;
     cellElements.forEach(cell => {
-        cell.classList.remove(X_CLASS)
-        cell.classList.remove(O_Class)
-        cell.removeEventListener('click', handleClick)
-        cell.addEventListener('click', handleClick, {once: true})
-    })
-    setBoardHoverClass()
-    resultElement.classList.remove('show')
-
+        cell.classList.remove(X_CLASS);
+        cell.classList.remove(O_Class);
+        cell.removeEventListener('click', handleClick);
+        cell.addEventListener('click', handleClick, { once: true });
+    });
+    setBoardHoverClass();
+    resultElement.classList.remove('show');
 }
+
 
 function handleClick(e){
     const cell = e.target
@@ -90,12 +76,71 @@ function setBoardHoverClass(){
     else board.classList.add(X_CLASS)
 }
 
-function checkWin(currentClass){
-    return WINNING_COMBINATIONS.some(combination => {
-        return combination.every(index => {
-            return cellElements[index].classList.contains(currentClass)
-        })
-    })
+function checkWin(currentClass) {
+    return checkRows(currentClass) || checkCols(currentClass) || checkDiagonals(currentClass);
+}
+
+function checkRows(currentClass) {
+    for (let row = 0; row < GRID_SIZE; row++) {
+        for (let col = 0; col <= GRID_SIZE - WIN_LENGTH; col++) {
+            let consecutiveMarks = 0;
+            for (let i = 0; i < WIN_LENGTH; i++) {
+                if (cellElements[(row * GRID_SIZE) + (col + i)].classList.contains(currentClass)) {
+                    consecutiveMarks++;
+                } else {
+                    break;  // Break early if a mark is not consecutive
+                }
+            }
+            if (consecutiveMarks === WIN_LENGTH) {
+                return true;  // Return true if 5 consecutive marks are found
+            }
+        }
+    }
+    return false;
+}
+
+  
+function checkCols(currentClass) {
+    for (let col = 0; col < GRID_SIZE; col++) {
+      for (let row = 0; row <= GRID_SIZE - WIN_LENGTH; row++) {
+        if (checkConsecutive(row, col, 1, 0, currentClass)) {
+          return true;
+        }
+      }
+    }
+    return false;
+}
+  
+function checkDiagonals(currentClass) {
+    // Top-left to bottom-right
+    for (let row = 0; row <= GRID_SIZE - WIN_LENGTH; row++) {
+      for (let col = 0; col <= GRID_SIZE - WIN_LENGTH; col++) {
+        if (checkConsecutive(row, col, 1, 1, currentClass)) {
+          return true;
+        }
+      }
+    }
+    
+    // Top-right to bottom-left
+    for (let row = 0; row <= GRID_SIZE - WIN_LENGTH; row++) {
+      for (let col = WIN_LENGTH - 1; col < GRID_SIZE; col++) {
+        if (checkConsecutive(row, col, 1, -1, currentClass)) {
+          return true;
+        }
+      }
+    }
+    
+    return false;
+}
+
+function checkConsecutive(startRow, startCol, rowIncrement, colIncrement, currentClass) {
+    for (let i = 0; i < WIN_LENGTH; i++) {
+      const index = (startRow + i) * GRID_SIZE + (startCol + i * colIncrement);
+      if (!cellElements[index].classList.contains(currentClass)) {
+        return false;
+      }
+    }
+    return true;
 }
 
 function isDraw(){
