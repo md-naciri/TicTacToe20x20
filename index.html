@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,11 +8,21 @@
     <script src="script.js" defer></script>
     <title>TicTacToe</title>
 </head>
+
 <body>
+
+    <div id="grid-size-input">
+        <label for="grid-size">Choose Grid Size:</label>
+        <input type="number" id="grid-size" value="20" min="3" max="50">
+        <button id="startGameButton">Start Game</button>
+    </div>
+
+
     <div class="board" id="board"></div>
     <div class="result" id="result">
         <div data-result-text></div>
         <button id="restartButton">RESTART</button>
     </div>
 </body>
+
 </html>
