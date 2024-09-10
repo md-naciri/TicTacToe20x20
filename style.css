@@ -1,52 +1,72 @@
-*, *::after, *::before {
+*,
+*::after,
+*::before {
     box-sizing: border-box;
 }
 
-:root{
+:root {
     --cell-size: 30px;
-    --mark-size: calc(var(--cell-size) * .8);
+    --mark-size: calc(var(--cell-size) * 0.8);
+    --border-color: rgba(0, 0, 0, 0.2);
+    --hover-color: rgba(0, 0, 0, 0.1);
+    --highlight-color: #ff6347;
+    /* Tomato color for highlight */
+    --light-color: #f5f5f5;
+    /* Light color for the board */
+    --dark-color: #333;
+    /* Dark color for text */
 }
 
-body{
+body {
     margin: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: var(--light-color);
 }
 
-.board{
+.board {
     width: 100vw;
     height: 100vh;
     display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(var(--cell-size), 1fr));
+    grid-gap: 1px;
     justify-content: center;
     align-content: center;
-    justify-items: center;
-    align-items: center;
-    /* grid-template-columns: repeat(30, auto); */
+    background-color: var(--light-color);
 }
 
-.cell{
+.cell {
     width: var(--cell-size);
     height: var(--cell-size);
-    border: 1px solid rgb(0, 0, 0);
+    border: 2px solid var(--border-color);
+    background-color: white;
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
     cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
 }
 
-.cell.x, .cell.o {
+.cell:hover {
+    background-color: var(--hover-color);
+    transform: scale(1.05);
+}
+
+.cell.x,
+.cell.o {
     cursor: not-allowed;
 }
 
 .cell.x::before,
 .cell.x::after,
-.cell.o::before{
-    background-color: black;
+.cell.o::before {
+    background-color: var(--dark-color);
 }
 
 .board.x .cell:not(.x):not(.o):hover::before,
 .board.x .cell:not(.x):not(.o):hover::after,
 .board.o .cell:not(.x):not(.o):hover::before {
-    background-color: lightgray;
+    background-color: var(--highlight-color);
 }
 
 .cell.x::before,
@@ -55,22 +75,23 @@ body{
 .board.x .cell:not(.x):not(.o):hover::after {
     content: '';
     position: absolute;
-    width: calc(var(--mark-size) * .15);
+    width: calc(var(--mark-size) * 0.15);
     height: calc(var(--mark-size));
 }
 
-.cell.cell.x::after,
+.cell.x::after,
 .board.x .cell:not(.x):not(.o):hover::after {
     transform: rotate(45deg);
 }
-.cell.cell.x::before,
+
+.cell.x::before,
 .board.x .cell:not(.x):not(.o):hover::before {
     transform: rotate(-45deg);
 }
 
 .cell.o::before,
 .cell.o::after,
-.board.o .cell:not(.x):not(.o):hover::before, 
+.board.o .cell:not(.x):not(.o):hover::before,
 .board.o .cell:not(.x):not(.o):hover::after {
     content: '';
     position: absolute;
@@ -78,47 +99,56 @@ body{
 }
 
 .cell.o::before,
-.board.o .cell:not(.x):not(.o):hover::before{
+.board.o .cell:not(.x):not(.o):hover::before {
     width: var(--mark-size);
     height: var(--mark-size);
+    background-color: var(--dark-color);
 }
 
 .cell.o::after,
-.board.o .cell:not(.x):not(.o):hover::after{
-    width: calc(var(--mark-size) * .7);
-    height: calc(var(--mark-size) * .7);
-    background-color: white;
+.board.o .cell:not(.x):not(.o):hover::after {
+    width: calc(var(--mark-size) * 0.7);
+    height: calc(var(--mark-size) * 0.7);
+    background-color: var(--light-color);
 }
 
-.result{
+.result {
     display: none;
     position: fixed;
     top: 0;
     right: 0;
     bottom: 0;
     left: 0;
-    background-color: rgba(0, 0, 0, .9);
+    background-color: rgba(0, 0, 0, 0.9);
     justify-content: center;
     align-items: center;
     color: antiquewhite;
     font-size: 5rem;
     flex-direction: column;
+    text-align: center;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+    transition: opacity 0.5s ease-in-out;
 }
 
-.result button{
+.result button {
     font-size: 3rem;
     background-color: white;
-    border: 1px solid black;
-    padding: .25em .5em;
+    border: 2px solid var(--dark-color);
+    padding: 0.5em 1em;
     cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
 }
 
-.result button:hover{
-    background-color: black;
+.result button:hover {
+    background-color: var(--dark-color);
     border-color: white;
     color: white;
 }
 
 .result.show {
     display: flex;
+    opacity: 1;
 }
